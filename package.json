@@ -2,9 +2,10 @@
   "name": "node-with-auth",
   "version": "1.0.0",
   "description": "A Node.js server with built-in user authentication and management",
-  "main": "src/server.js",
+  "main": "api/server.js",
+  "type": "module",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "nodemon src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,6 +24,13 @@
   },
   "homepage": "https://github.com/emadjalali/node-with-auth#readme",
   "dependencies": {
-    "express": "^4.21.0"
+    "bcrypt": "^5.1.1",
+    "express": "^4.21.0",
+    "express-validator": "^7.2.0",
+    "mongodb": "^6.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.6",
+    "prettier": "^3.3.3"
   }
 }
