@@ -19,7 +19,7 @@ class AuthService {
   async register(userDetails) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(userDetails.password, salt);
-
+    userDetails.hashedPassword = hashedPassword;
     const user = new User(userDetails);
     const result = await this.userRepository.addUser(user.userDetails);
     return result;

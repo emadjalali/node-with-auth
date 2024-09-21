@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 
 import { connectToMongoDB } from './v1/config/mongoConfig.js';
 import authRoutes from './v1/routes/authRoutes.js';
+
 const app = express();
 app.use(bodyParser.json());
 const port = process.env.PORT || 4200;
