@@ -1,3 +1,4 @@
+import { UserRepository } from '../repositories/userRepository.js';
 const USERROLE = Object.freeze({
   ADMIN: 'admin',
   USER: 'user',
@@ -31,6 +32,8 @@ class User {
   #phoneVerified;
   #role;
 
+  static #userRepository = new UserRepository();
+
   //username and hashedPassword are required fields
   constructor({
     userId,
@@ -61,10 +64,10 @@ class User {
     this.#firstName = firstName || null;
     this.#lastName = lastName || null;
     this.#avatarURL = avatarURL || null;
-    this.#createdAt = new Date();
+    this.#createdAt = createdAt || new Date();
     this.#updatedAt = updatedAt || null;
     this.#lastLogin = lastLogin || null;
-    this.#status = status ? setStatus(status) : STATUS.ACTIVE;
+    this.#status = status ? this.setStatus(status) : STATUS.ACTIVE;
     this.#emailVerified = emailVerified || 0;
     this.#phoneVerified = phoneVerified || 0;
     this.#role = role ? this.setRole(role) : USERROLE.USER;
@@ -152,7 +155,33 @@ class User {
   }
 
   setRole(role) {
-    this.role = role;
+    if (!Object.values(USERROLE).includes(role)) {
+      throw new Error(`Invalid role: ${role}`);
+    }
+    return (this.#role = role);
+  }
+
+  setEmailVerified(value) {
+    if (value === 1 || value === true) value = 1;
+    else value = 0;
+    return (this.#emailVerified = value);
+  }
+
+  static async getUserFromDb(username) {
+    const userDetails = await User.#userRepository.findByUsername(username);
+    return new User(userDetails);
+  }
+
+  addUserToDb() {
+    return User.#userRepository.addUser(this.userDetails);
+  }
+
+  updateEmailVerifiedOnDb() {
+    return User.#userRepository.updateEmailVerified(
+      this.#username,
+      this.#email,
+      this.#emailVerified,
+    );
   }
 }
 
